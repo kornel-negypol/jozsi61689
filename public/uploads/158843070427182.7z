@@ -1,0 +1,11 @@
+Reporting-MTA: dns;F2SERVER.ago-stone.hu.local
+Received-From-MTA: dns;mercarius.hu
+Arrival-Date: Sat, 2 May 2020 14:40:38 +0000
+
+Final-Recipient: rfc822;support@bma-informatika.hu
+Action: failed
+Status: 5.7.606
+Diagnostic-Code: smtp;550 5.7.606 Access denied, banned sending IP [37.220.201.202]. To request removal from this list please visit https://sender.office.com/ and follow the directions. For more information please go to  http://go.microsoft.com/fwlink/?LinkID=526655 AS(1430)
+Remote-MTA: dns;VI1EUR04FT026.mail.protection.outlook.com
+X-Display-Name: =?iso-8859-2?Q?F=F6ldi_Mih=E1ly?=
+
