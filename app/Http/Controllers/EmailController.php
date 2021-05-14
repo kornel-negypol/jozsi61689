@@ -205,7 +205,9 @@ class EmailController extends Controller
 						
 						$owners_email = DB::table('users')->select('email')->where('id', $ticket->owner)->first();
 					    if (isset($owners_email)) {
-							Mail::queue('emails.newTicketMail', ['title' => '#'.$ticket_number . ' számú hibajegyhez hozzászóltak', 'content' => $content], function ($message) use ($owners_email,$subject) {
+							//lapukornel 2021.05.11 - Levélbe link beszúrása
+							$ticket_url = redirect()->to('/editTicket/'.$ticket)->getTargetUrl();
+							Mail::queue('emails.newTicketMailURL', ['title' => '#'.$ticket_number . ' számú hibajegyhez hozzászóltak', 'content' => $content, 'ticket_url' => $ticket_url], function ($message) use ($owners_email,$subject) {
 								$message->to($owners_email->email);
 								$message->subject($subject);
 							});
@@ -508,7 +510,9 @@ class EmailController extends Controller
 						
 						$owners_email = DB::table('users')->select('email')->where('id', $ticket->owner)->first();
 					    if (isset($owners_email)) {
-							Mail::queue('emails.newTicketMail', ['title' => '#'.$ticket_number . ' számú hibajegyhez hozzászóltak', 'content' => $textcontent], function ($message) use ($owners_email,$subject) {
+							//lapukornel 2021.05.11 - Levélbe link beszúrása
+							$ticket_url = redirect()->to('/editTicket/'.$ticket)->getTargetUrl();
+							Mail::queue('emails.newTicketMailURL', ['title' => '#'.$ticket_number . ' számú hibajegyhez hozzászóltak', 'content' => $textcontent, 'ticket_url' => $ticket_url], function ($message) use ($owners_email,$subject) {
 								$message->to($owners_email->email);
 								$message->subject($subject);
 							});

@@ -35,7 +35,8 @@ class MyLoginController extends Controller
                 session(['partner' => 0]);
                 session(['user' => 0]);                
             }
-            return redirect('/');
+            //return redirect('/');     //lapukornel 2021.04.26
+            return redirect()->intended('/');
         }
         return back()->withInput()->withErrors(['email' => 'Hibás e-mail cím, vagy jelszó!']);
     }

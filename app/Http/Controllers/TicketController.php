@@ -412,7 +412,10 @@ class TicketController extends Controller
         }
         if (isset($owners_email)) {            
 			$subject = "Új hibajegy - #".$id;
-            Mail::queue('emails.newTicketMail', ['title' => '#'.$id . ' számú hibajegy rögzítésre került', 'content' => $request->input('ticket-title')], function ($message) use ($owners_email, $id)
+
+            //lapukornel 2021.05.11 - Levélbe link beszúrása
+            $ticket_url = redirect()->to('/editTicket/'.$id)->getTargetUrl();
+            Mail::queue('emails.newTicketMailURL', ['title' => '#'.$id . ' számú hibajegy rögzítésre került', 'content' => $request->input('ticket-title'), 'ticket_url' => $ticket_url ], function ($message) use ($owners_email, $id)
             {
                 $message->to($owners_email->email);
                 $message->subject("Új hibajegy - #".$id);
@@ -507,7 +510,9 @@ class TicketController extends Controller
 			$subject = "A #".$request->ticket_ID ." sorszámú hibajegy / feladat neked lett kiosztva - IT Szerviz HelpDesk";
             $content = "A #".$request->ticket_ID . " számú hibajegy / feladat neked lett kiosztva."; 
 
-			Mail::queue('emails.newTicketMail', ['title' => "A feladat tárgya: ".$ticket->title, "content" => $content], function ($message) use ($reply_address,$subject) {
+            //lapukornel 2021.05.11 - Levélbe link beszúrása
+            $ticket_url = redirect()->to('/editTicket/'.$request->ticket_ID)->getTargetUrl();
+            Mail::queue('emails.newTicketMailURL', ['title' => "A feladat tárgya: ".$ticket->title, "content" => $content, 'ticket_url' => $ticket_url], function ($message) use ($reply_address,$subject) {
 								$message->to($reply_address);
 								$message->subject($subject);
 			});
@@ -670,11 +675,14 @@ class TicketController extends Controller
             $owner = DB::table('users')->where('id',$request->owner)->select('email')->first();
             $owners_email = $owner->email;
             $t_ID = $request->ticket_ID;
-                Mail::queue('emails.newTicketMail', ['title' => 'A #'.$t_ID . ' számú hibajegyhez hozzászóltak', 'content' => $request->comment], function ($message) use ($owners_email, $t_ID)
-                {
-                    $message->to($owners_email);
-                    $message->subject('A #'.$t_ID . ' számú hibajegyhez hozzászóltak');
-                });
+    
+            //lapukornel 2021.05.11 - Levélbe link beszúrása
+            $ticket_url = redirect()->to('/editTicket/'.$id)->getTargetUrl();
+            Mail::queue('emails.newTicketMailURL', ['title' => 'A #'.$t_ID . ' számú hibajegyhez hozzászóltak', 'content' => $request->comment, 'ticket_url' => $ticket_url], function ($message) use ($owners_email, $t_ID)
+            {
+                $message->to($owners_email);
+                $message->subject('A #'.$t_ID . ' számú hibajegyhez hozzászóltak');
+            });
         }
         
     // log írás
